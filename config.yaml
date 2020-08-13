@@ -1,3 +1,4 @@
 phone_number: "+8613810718824"
+downloader_instance_num: 10
 downloaer:
   - { channel_name: "xxxx",download_count: 50,save_path: "d:\\" }

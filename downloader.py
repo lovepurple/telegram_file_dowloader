@@ -1,15 +1,32 @@
 from telethon import TelegramClient
 from telethon.tl.types import InputMessagesFilterPhotoVideo
+import os
+from terminalutils import *
+import time
+from multiprocessing import Pool
 
 api_id = 1659305
 api_hash = "3dcd4963c613d3331e5057446bee6764"
 phone_number = "+8613810718824"
+download_folder = r"G:\TelegramDownload"
 
 client = TelegramClient("session", api_id, api_hash)
 
 
 async def connect():
     await client.connect()
+
+
+# async def download_media(telethonMsg):
+#     file_path = os.path.join(download_folder, telethonMsg.file.name)
+#     if os.path.isfile(file_path):
+#         prRed("exist file:"+file_path)
+#     else:
+#         prGreen("start downloading file:"+file_path +
+#                 " time:"+str(time.perf_counter()))
+#         await client.download_media(message=msg, file=file_path)
+#         prYellow("file:"+file_path +
+#                  "download finish on:" + str(time.perf_counter()))
 
 
 async def check_authorized():
@@ -23,19 +40,20 @@ async def check_authorized():
     # dialogs = client.iter_dialogs()         # 获取所有的对话  -1001375250801
     # async for dialog in dialogs:
     chat = await client.get_entity(-1001375250801)
-    msgs = await client.get_messages(chat, 50, filter=InputMessagesFilterPhotoVideo)
+    msgs = await client.get_messages(chat, 1000, filter=InputMessagesFilterPhotoVideo)
+
     for msg in msgs:
-        # await client.download_media(message=msg)
-        await client.download_media(message=msg, file="G:\\"+msg.file.name)
-        break
+        file_path = os.path.join(download_folder, msg.file.name)
+        if os.path.isfile(file_path):
+            prRed("exist file:"+file_path)
+        else:
+            prGreen("start downloading file:"+file_path +
+                    " time:"+str(time.perf_counter()))
+            await client.download_media(message=msg, file=file_path)
+            prYellow("file:"+file_path +
+                     "download finish on:" + str(time.perf_counter()))
 
-
-# async def trySignin():
-
-
-#     client.loop.run_until_complete(trySign())
-
-#     me = client.sign_in(phone_number, )  # input()方法接受输入
+    prPurple("download finish")
 
 
 if __name__ == "__main__":

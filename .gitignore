@@ -1,3 +1,4 @@
 *.mp4
 session.session
 /.vscode
+/__pycache__/
